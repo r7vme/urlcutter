@@ -1,6 +1,8 @@
 import sys
 import sqlite3
+import re
 from flask import Flask
+from flask import abort
 from flask import request
 from flask import redirect
 from flask import g
@@ -35,6 +37,10 @@ def handle_index_page():
 
 @app.route("/<url>")
 def handle_redirect_to(url):
+    # Filter only allowed urls
+    if not re.search(r"^[a-zA-Z0-9]*$", url):
+        abort(400)
+
     # Decode url to integer
     url_id = encoder.base_decode(url)
 

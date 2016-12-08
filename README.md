@@ -18,20 +18,25 @@ python3 urlcutter/urlcutter.py
 
 ## Run with Docker
 
+Build image
+
 ```
 docker build -t urlcutter .
-docker run urlcutter
 ```
 
-Run with external database.
+Create directory for database
+
 ```
-docker run --name cutter -d --env DBPATH=/var/urlcutter/urlcutter.sqlite -v /var/urlcutter:/var/urlcutter urlcutter
+sudo mkdir /var/urlcutter
+sudo chown 10000 /var/urlcutter
+```
+
+Run container
+
+```
+docker run --name cutter -d -p 80:5000 -v /var/urlcutter:/var/urlcutter urlcutter
 ```
 
 ## TODO
 
-- Expose port in docker file
-
 ## Known issues
-
-- favicon.ico causes error 500

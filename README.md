@@ -31,10 +31,29 @@ sudo mkdir /var/urlcutter
 sudo chown 10000 /var/urlcutter
 ```
 
-Run container
+### Run container standalone
 
 ```
 docker run --name cutter -d -p 80:5000 -v /var/urlcutter:/var/urlcutter urlcutter
+```
+
+### Run behind Nginx
+
+```
+docker run --name cutter -d -p 127.0.0.1:5000:5000 -v /var/urlcutter:/var/urlcutter urlcutter
+```
+
+Add following location to Nginx site config
+
+```
+location / {
+        proxy_redirect     off;
+        proxy_set_header   Host                 $host;
+        proxy_set_header   X-Real-IP            $remote_addr;
+        proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto    $scheme;
+        proxy_pass http://127.0.0.1:5000;
+}
 ```
 
 ## TODO

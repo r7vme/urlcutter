@@ -7,6 +7,7 @@ from flask import request
 from flask import redirect
 from flask import g
 from flask import render_template
+from werkzeug.contrib.fixers import ProxyFix
 
 import encoder
 
@@ -72,8 +73,15 @@ def handle_urlcutter():
 
     # Get url_id
     url_id = rv[0]
+
+    if request.environ.get("HTTP_X_FORWARDED_PROTO") and request.environ.get("HTTP_HOST"):
+        url_root = "{}://{}/".format(request.environ["HTTP_X_FORWARDED_PROTO"],
+                                     request.environ["HTTP_HOST"])
+    else:
+        url_root = request.url_root
+
     # Encode url_id with Base58
-    return request.url_root + encoder.base_encode(url_id)
+    return url_root + encoder.base_encode(url_id)
 
 if __name__ == "__main__":
     # Run with debug from CLI

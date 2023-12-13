@@ -7,7 +7,7 @@ from flask import request
 from flask import redirect
 from flask import g
 from flask import render_template
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 import encoder
 
